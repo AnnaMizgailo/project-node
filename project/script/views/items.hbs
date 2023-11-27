@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping house</title>
+    <link rel="stylesheet" href="./index.css">
+    <script defer="./index.js"></script>
+</head>
+<body>
+    <input type="text" id="search" placeholder="поиск 🔍︎">
+    <div class="items-container">
+        {{#each items}}
+            {{#with .}}
+                <div class="item-container">
+                    <img class="item-img" src={{itemImg}}>
+                    <p class="price">{{price}} руб</p>
+                    <p class="retailer">{{retailer}}</p>
+                    <p class="itemName">{{itemName}}</p>
+                    <div class="cont">
+                        <p class="rating">{{rating}}⭐</p>
+                        <p class="sales">{{sales}}🛒</p>
+                    </div>
+                    
+                    <button class="button-cart" onclick="addToCart()">В корзину</button>
+                </div>
+            {{/with}}
+        {{/each}}
+    </div>
+    
+</body>
+</html>
