@@ -6,10 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping house</title>
     <link rel="stylesheet" href="./index.css">
-    <script defer="./index.js"></script>
+    <script defer src="./index.js"></script>
 </head>
 <body>
-    <input type="text" id="search" placeholder="поиск 🔍︎">
+    <div class="menu">
+        <button onclick="enableAuthorization()" class="profile">Профиль</button>
+        <div id="myProfile" class="profile-content">
+                <a href="./sign-up.html">Регистрация</a>
+                <a href="./sign-in.html">Вход</a>
+                <a href="./personal-info.hbs">Личный кабинет</a>
+        </div>
+        <select id="filters">
+            <option value="">Категория</option>
+            <option value="accesories">Аксессуары</option>
+            <option value="clothes">Одежда</option>
+            <option value="cosmetics">Косметика</option>
+            <option value="presents">Подарки</option>
+            <option value="stationery">Канцелярия</option>
+        </select>
+        <input type="text" id="search" placeholder="поиск 🔍︎">
+</div>
     <div class="items-container">
         {{#each items}}
             {{#with .}}

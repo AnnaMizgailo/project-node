@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign-up</title>
+    <link rel="stylesheet" href="./index_auth.css">
+    <script defer src="./index.js"></script>
+</head>
+<body>
+    <div class="container up">
+        
+        <input type="text" id="newLogin" placeholder="Логин:">
+        <input type="text" id="newPassword" placeholder="Пароль:">
+        <select id="role">
+            <option value="">Выберите роль</option>
+            <option value="moderator">Модератор</option>
+            <option value="retailer">Продавец</option>
+            <option value="customer">Покупатель</option>
+        </select>
+        <button id="sign-up" onclick="signUp()">Зарегистрироваться</button>
+    </div>
+</body>
+</html>

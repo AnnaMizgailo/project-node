@@ -1,0 +1,36 @@
+.container{
+    width: 20%;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 5% auto;
+   
+    padding: 10%;
+    border-radius: 30%;
+}
+.container>{
+    width: 70%;
+}
+.container>button{
+    width: 60%;
+    background-color: #fff;
+    
+    border: none;
+    padding: 10%;
+    margin: 0 auto;
+    border-radius: 5%;
+
+}
+.in{
+    background-color: #6600ff;
+}
+#sign-in{
+    color: #6600ff;
+}
+.up{
+    background-color: #00008b;
+}
+#sign-up{
+    color: #00008b;
+}
