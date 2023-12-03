@@ -1,6 +1,1 @@
-{
-    "skinfood.by":{
-        "password": "11111111",
-        "items": ["Маска для губ Laneige"]
-    }
-}
+{"skinfood.by":{"password":"11111111","role":"retailer","items":["Маска для губ Laneige"]},"Person":{"password":"Person","role":"customer","items":[]},"Person1":{"password":"Person1","role":"retailer","items":[]},"Person12":{"password":"Person12","role":"customer","image":"blob:http://localhost:3000/f0a6a55f-1bb4-4c17-95d0-dd8959805f82"}}
