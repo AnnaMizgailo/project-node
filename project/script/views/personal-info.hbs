@@ -17,7 +17,6 @@
                     <img id="user-image" src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png">
                 {{/unless}}
                 <p>{{currentUser.login}}</p>
-                <p>{{currentUser.role}}</p>
                 {{#each currentUser.items}}
                     <li>{{this}}</li>
                 {{/each}}
@@ -25,6 +24,12 @@
         {{#unless currentUser}}
             <p>Упс... Нужно зарегистрироваться!</p>
         {{/unless}}
+        {{#if currentUser.retail}}
+            <button><a href="/html/add-item.html">Добавить товар</a></button>
+        {{/if}}
+        {{#if currentUser.moderate}}
+            <button onclick="userModify()">Работа с пользователями</button>
+        {{/if}}
         <button onclick="backToMainPage()">На главную</button>
     </div>
 </body>

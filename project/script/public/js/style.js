@@ -7,6 +7,15 @@ avatarSelect.onchange = (event) =>{
       avatarLabel.classList.toggle("disable");
   }
 };
+itemSelect.onchange = (event) =>{
+  const image = itemSelect.files[0];
+  if (image){
+      itemImage.src = URL.createObjectURL(image);
+      itemImage.classList.toggle("previewAvatar");
+      itemLabel.classList.remove("previewAvatar");
+      itemLabel.classList.toggle("disable");
+  }
+};
 async function enableAuthorization() {
     document.getElementById("myProfile").classList.toggle("show");
 }

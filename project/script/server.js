@@ -1,6 +1,6 @@
 const path = require("path");
 const express = require("express");
-const {returnListOfItems, addNewUser, checkUser} = require("./data/data");
+const {returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers} = require("./data/data");
 
 const app = express();
 
@@ -11,7 +11,7 @@ app.set("view engine", "hbs");
 app.use(express.static(path.join(__dirname, "public")));
 
 let currentUser;
-const items = returnListOfItems();
+let items = returnListOfItems();
 
 app
     .get("/", (_, res) =>{
@@ -25,7 +25,6 @@ app
             return;
         }
         currentUser = req.body;
-        authorized = true;
         res.status(200).render("items.hbs", {items: items, currentUser});
     })
     .get("/user/sign-in", (req, res) =>{
@@ -37,11 +36,25 @@ app
             return;
         }
         currentUser = user;
-        authorized = true;
         res.status(200).render("items.hbs", {items: items, currentUser});
     })
     .get("/user/personal-cabinet", (_, res) =>{
         res.render("personal-info.hbs", {currentUser});
+    })
+    .post("/retailer/add/item", (req, res) =>{
+        let item = req.body;
+        item.retailer = currentUser.login;
+        const response = addNewItem(item);
+        if(response !== "Товар добавлен!"){
+            res.status(500).send(response);
+            return;
+        }
+        items = returnListOfItems();
+        res.status(200).send(response);
+    })
+    .get("/user/moderate", (_, res) =>{
+        let users = returnModifyingListOfUsers();
+        res.status(200).render("moderate-users.hbs", {users: users});
     })
     .use((_, res)=>{
         res.status(404).send("<h1>Not found</h1>");

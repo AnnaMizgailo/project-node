@@ -31,7 +31,25 @@ function returnListOfItems(){
     }
     return listOfItems;
 }
-function ifExists(login){
+function returnModifyingListOfUsers(){
+    const keys = Object.keys(users);
+    listOfUsers = [];
+    let id = 0;
+    for(const key of keys){
+        if(users[key].role !== "moderator"){
+            const itemObj = {
+                id: ++id,
+                login: key,
+                image: users[key].image,
+                role: users[key].role
+            };
+            listOfUsers.push(itemObj);
+        }
+        
+    }
+    return listOfUsers;
+}
+function ifUserExists(login){
     const keys = Object.keys(users);
     for (const key of keys){
         if(key == login){
@@ -40,14 +58,30 @@ function ifExists(login){
     }
     return false;
 }
+function ifItemExists(name){
+    const keys = Object.keys(items);
+    for (const key of keys){
+        if(key == name){
+            return true;
+        }
+    }
+    return false;
+}
 function addNewUser(obj){
     const {login, password, role, image} = obj;
-    if(!ifExists(login)){
+    if(!ifUserExists(login)){
         if(login && password && role){
             users[login] = {
                 password: password,
                 role: role
             };
+            if(role == "moderator"){
+                users[login].moderate = true;
+            }else if(role == "retailer"){
+                users[login].retail = true;
+            }else{
+                users[login].shop = true;
+            }
         if(image !== ""){
             users[login].image = image;
         }
@@ -59,12 +93,27 @@ function addNewUser(obj){
     return "Такой логин уже используется!";
 }
 function checkUser(login, password){
-    if(ifExists(login)){
+    if(ifUserExists(login)){
         if(password == users[login].password){
             return {login: login, ...users[login]};
         }
     }
     return false;
 }
+function addNewItem(obj){
+    const {name, price, category, retailer} = obj;
+    if(!ifItemExists(name) && name && price && category){
+        items[name] = {
+            price: +price,
+            category: category,
+            retailer: retailer,
+            sales: 0,
+            rating: 0
+        };
+        restoreJson();
+        return "Товар добавлен!";
+    }
+    return "Произошла ошибка!";
+}
 
-module.exports = {returnListOfItems, addNewUser, checkUser};
+module.exports = {returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers};
