@@ -4,9 +4,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Корзина</title>
 </head>
 <body>
-    
+    {{#each cart_items}}
+        {{#with .}}
+                <div class="item-container">
+                    <img class="item-img" src={{itemImg}}>
+                    <p class="price">{{price}} руб</p>
+                    <p class="retailer">{{retailer}}</p>
+                    <p class="itemName">{{itemName}}</p>
+                    <div class="cont">
+                        <p class="rating">{{rating}}⭐</p>
+                        <p class="sales">{{sales}}🛒</p>
+                    </div>
+                    <button class="button-cart" onclick="payForItem({{id}})">Оплатить</button>
+                </div>
+        {{/with}}
+    {{/each}}
 </body>
 </html>

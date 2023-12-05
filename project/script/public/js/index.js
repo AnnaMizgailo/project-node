@@ -57,3 +57,35 @@ async function addItem(){
 async function userModify(){
   document.location = "/user/moderate";
 }
+async function deleteUser(id){
+  const response = await fetch(`/user/moderate/delete?id=${id}`, {
+    method: "DELETE",
+  });
+  if(response.ok){
+    alert("Пользователь удален!");
+  }
+}
+async function banUser(id){
+  const data = {id: id};
+  const response = await fetch("/user/moderate/ban", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data)});
+    if(response.ok){
+      alert("Пользователь забанен!");
+    }
+}
+async function unbanUser(id){
+  const data = {id: id};
+  const response = await fetch("/user/moderate/unban", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data)});
+    if(response.ok){
+      alert("Пользователь разбанен!");
+    }
+}

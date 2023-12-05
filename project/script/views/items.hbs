@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="menu">
-        <button><a href="/user/cart">Корзина</a></button>
+        <button class="cart"><a href="/user/cart">Корзина</a></button>
         <button onclick="enableAuthorization()" class="profile">Профиль</button>
         <div id="myProfile" class="profile-content">
                 <a href="./html/sign-up.html">Регистрация</a>
@@ -40,8 +40,7 @@
                         <p class="rating">{{rating}}⭐</p>
                         <p class="sales">{{sales}}🛒</p>
                     </div>
-                    
-                    <button class="button-cart" onclick="addToCart()">В корзину</button>
+                    <button class="button-cart" onclick="addToCart({{id}})">В корзину</button>
                 </div>
             {{/with}}
         {{/each}}

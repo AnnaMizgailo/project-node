@@ -86,3 +86,14 @@ body{
     border: none;
     color: white;
 }
+.cart{
+    background-color: plum;
+    border: none;
+    font-size: 16px;
+    color: white;
+   
+}
+.cart a{
+    color: white;
+    text-decoration: none;
+}

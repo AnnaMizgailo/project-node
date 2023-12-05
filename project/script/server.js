@@ -1,6 +1,6 @@
 const path = require("path");
 const express = require("express");
-const {returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers} = require("./data/data");
+const {returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser} = require("./data/data");
 
 const app = express();
 
@@ -32,7 +32,7 @@ app
         const password = req.query.password;
         const user = checkUser(login, password);
         if(!user){
-            res.status(500).send("Пользователь не найден");
+            res.status(500).send("Пользователь не найден либо забанен");
             return;
         }
         currentUser = user;
@@ -55,6 +55,27 @@ app
     .get("/user/moderate", (_, res) =>{
         let users = returnModifyingListOfUsers();
         res.status(200).render("moderate-users.hbs", {users: users});
+    })
+    .delete("/user/moderate/delete", (req, res) =>{
+        const id = req.query.id;
+        const array = returnModifyingListOfUsers();
+        deleteUserById(id, array);
+        const listOfUsers = returnModifyingListOfUsers();
+        res.status(200).render("moderate-users.hbs", {listOfUsers: listOfUsers});
+    })
+    .put("/user/moderate/ban", (req, res)=>{
+        const id = req.body.id;
+        const array = returnModifyingListOfUsers();
+        banUser(id, array);
+        const listOfUsers = returnModifyingListOfUsers();
+        res.status(200).render("moderate-users.hbs", {listOfUsers: listOfUsers});
+    })
+    .put("/user/moderate/unban", (req, res)=>{
+        const id = req.body.id;
+        const array = returnModifyingListOfUsers();
+        unbanUser(id, array);
+        const listOfUsers = returnModifyingListOfUsers();
+        res.status(200).render("moderate-users.hbs", {listOfUsers: listOfUsers});
     })
     .use((_, res)=>{
         res.status(404).send("<h1>Not found</h1>");
