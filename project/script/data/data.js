@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs");
+const { ifError } = require("assert");
 let dataFromUsers = fs.readFileSync(path.join(__dirname, "./users.json"),{encoding: "utf-8"});
 let dataFromItems = fs.readFileSync(path.join(__dirname, "./items.json"),{encoding: "utf-8"});
 
@@ -27,7 +28,8 @@ function returnListOfItems(){
             price: +items[key].price,
             retailer: items[key].retailer, 
             rating: +items[key].rating,
-            sales: +items[key].sales
+            sales: +items[key].sales,
+            category: items[key].category
         };
         listOfItems.push(itemObj);
     }
@@ -69,6 +71,14 @@ function ifItemExists(name){
     }
     return false;
 }
+function ifItemInArray(array, name){
+    for(let i = 0; i < array.length; i++){
+        if(array[i] == name){
+            return true;
+        }
+    }
+    return false;
+}
 function addNewUser(obj){
     const {login, password, role, image} = obj;
     if(!ifUserExists(login)){
@@ -82,11 +92,11 @@ function addNewUser(obj){
                 users[login].moderate = true;
             }else if(role == "retailer"){
                 users[login].retail = true;
-                users[key].shop_items = [];
+                users[login].items = [];
             }else{
                 users[login].shop = true;
-                users[key].cart_items = [];
-                users[key].purchases = [];
+                users[login].cart_items = [];
+                users[login].items = [];
             }
         if(image !== ""){
             users[login].image = image;
@@ -140,5 +150,60 @@ function unbanUser(id, array){
     users[name].banned = false;
     restoreJson();
 }
+function addItemToCartById(id, array, login){
+    if(users[login].role == "customer"){
+        const item = array[id].itemName;
+        if(ifItemInArray(users[login].cart_items, item)){
+            return "Товар уже в корзине!";
+        }
+        users[login].cart_items.push(item);
+        restoreJson();
+        return "Товар успешно добавлен!";
+    }
+    return "Вы не являетесь покупателем!";
+    
+}
+function deleteItemFromCartById(id, login){
+    users[login].cart_items.splice(id, 1);
+    restoreJson();
+    return "Товар удален из корзины!";
+}
+function returnListOfObjectsByNames(arrayOfNames){
+    let listOfObjects = [];
+    for(let i = 0; i < arrayOfNames.length; i++){
+        let obj = items[arrayOfNames[i]];
+        obj.id = +i;
+        listOfObjects.push(obj);
+    }
+    return listOfObjects;
+}
+function addPurchase(itemName, userName){
+    items[itemName].sales +=1;
+    users[userName].items.push(itemName);
+    restoreJson();
+}
+function returnListOfFilteredItems(category){
+    let array = returnListOfItems();
+    if(category==""){
+        return array;
+    }
+    for(let i = 0; i < array.length; i++){
+        if(array[i].category !== category){
+            array.splice(i, 1);
+            i--;
+        }
+    }
+    return array;
+}
+function getListOfItemsBySubname(subname){
+    let array = returnListOfItems();
+    let listOfItems = [];
+    for(let i = 0; i < array.length; i++){
+        if(array[i].itemName.toLowerCase().includes(subname.toLowerCase())){
+            listOfItems.push(array[i]);
+        }
+    }
+    return listOfItems;
+}
 
-module.exports = {returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser};
+module.exports = {getListOfItemsBySubname, returnListOfFilteredItems, addPurchase, deleteItemFromCartById, returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser, addItemToCartById, returnListOfObjectsByNames};

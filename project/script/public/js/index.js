@@ -89,3 +89,52 @@ async function unbanUser(id){
       alert("Пользователь разбанен!");
     }
 }
+
+async function addToCart(id){
+  const itemId = {id: id};
+  const response = await fetch("/user/add/cart", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(itemId)});
+    if(response.ok){
+      alert(await response.text());
+    }
+}
+
+async function deleteFromCart(id){
+  const response = await fetch(`/user/delete/cart?id=${id}`, {
+    method: "DELETE"
+    });
+    if(response.ok){
+      alert(await response.text());
+    }
+}
+
+async function payForItem(id){
+  const response = await fetch(`/user/pay/cart?id=${id}`, {
+    method: "DELETE"
+    });
+    if(response.ok){
+      alert(await response.text());
+    }
+}
+
+async function filterItems(){
+  const category = document.querySelector("#filters").value;
+  await fetch(`/filter?category=${category}`);
+}
+
+async function resetFilters(){
+  const category = "";
+  await fetch(`/filter?category=${category}`);
+}
+document.querySelector("#search").addEventListener('keydown', function(e){
+  if(e.keyCode == 13){
+    const searchBar = document.querySelector("#search").value;
+    await fetch(`/search?str=${searchBar}`);
+  }
+})
+
+

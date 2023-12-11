@@ -97,3 +97,21 @@ body{
     color: white;
     text-decoration: none;
 }
+.cart-page{
+    border: 2px solid #990066;
+    border-radius: 20%;
+    margin: 2%;
+}
+.cart-page>button{
+    background-color: #990066;
+}
+#back-to-main{
+    background-color: #990066;
+    color: WHITE;
+    border: none;
+    width: 10%;
+    height: 4vh;
+    border-radius: 5%;
+    margin-left: 45%;
+    align-items: center;
+}

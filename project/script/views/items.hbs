@@ -18,7 +18,7 @@
                 <a href="./html/sign-in.html">Вход</a>
                  <a href="/user/personal-cabinet">Личный кабинет</a>
         </div>
-        <select id="filters">
+        <select onchange="filterItems()" ondblclick="resetFilters()" id="filters">
             <option value="">Категория</option>
             <option value="accesories">Аксессуары</option>
             <option value="clothes">Одежда</option>
