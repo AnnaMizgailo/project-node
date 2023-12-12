@@ -1,22 +1,7 @@
-async function signUp(){
-  const user = {
-    login: document.querySelector("#newLogin").value,
-    password: document.querySelector("#newPassword").value,
-    role: document.querySelector("#role").value,
-    image: avatarSelect.files[0]
-  }
-  const response = await fetch("/user/sign-up", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
-  });
-  if(response.ok){
-    document.location = "/";
-    return;
-  }
-  alert(await response.text());
+async function signUp(event){
+  event.preventDefault();
+  form.submit();
+
 }
 async function signIn(){
     const login = document.querySelector("#login").value;
@@ -32,26 +17,10 @@ async function backToMainPage(){
     document.location = "/";
 }
 
-async function addItem(){
-  const item = {
-    name: document.querySelector("#itemName").value,
-    price: document.querySelector("#itemPrice").value,
-    category: document.querySelector("#category").value,
-    image: itemSelect.files[0]
-  }
-  const response = await fetch("/retailer/add/item", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(item),
-  });
-  if(response.ok){
-    alert(await response.text());
+async function addItem(event){
+    event.preventDefault();
+    form-item.submit();
     document.location = "/";
-    return;
-  }
-  alert(await response.text());
 }
 
 async function userModify(){
@@ -123,18 +92,37 @@ async function payForItem(id){
 
 async function filterItems(){
   const category = document.querySelector("#filters").value;
-  await fetch(`/filter?category=${category}`);
+  const response = await fetch(`/filter?category=${category}`);
+  if(response.ok){
+    document.location = "/";
+    location.reload();
+    document.querySelector("#search").value = category;
+  }
 }
 
 async function resetFilters(){
   const category = "";
-  await fetch(`/filter?category=${category}`);
+  const response = await fetch(`/filter?category=${category}`);
+  if(response.ok){
+    document.location = "/";
+    location.reload();
+    document.querySelector("#search").value = category;
+  }
 }
-document.querySelector("#search").addEventListener('keydown', function(e){
+
+async function search(e){
   if(e.keyCode == 13){
     const searchBar = document.querySelector("#search").value;
-    await fetch(`/search?str=${searchBar}`);
+    console.log(searchBar);
+    const response = await fetch(`/search?str=${searchBar}`);
+    if(response.ok){
+      document.location = "/";
+      location.reload();
+      document.querySelector("#search").value = searchBar;
+    }
   }
-})
+}
+
+document.querySelector("#search").addEventListener('keydown', search)
 
 

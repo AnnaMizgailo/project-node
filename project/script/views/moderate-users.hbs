@@ -13,7 +13,7 @@
     {{#each users}}
         {{#with .}}
             <div class="container">
-                <img src={{image}}>
+                <img src="../uploads/{{image}}">
                 <p>{{login}}</p>
                 <p>{{role}}</p>
                 <button onclick="deleteUser({{id}})">Удалить пользователя</button>

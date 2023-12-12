@@ -1,21 +1,20 @@
-avatarSelect.onchange = (event) =>{
+avatarSelect.onchange = (event) => {
   const image = avatarSelect.files[0];
-  if (image){
-      avatarImage.src = URL.createObjectURL(image);
-      avatarImage.classList.toggle("previewAvatar");
-      avatarLabel.classList.remove("previewAvatar");
-      avatarLabel.classList.toggle("disable");
+  if (image) {
+    avatarImage.src = URL.createObjectURL(image);
+    avatarImage.classList.toggle("preview-avatar");
   }
 };
-itemSelect.onchange = (event) =>{
+
+itemSelect.onchange = (event) => {
   const image = itemSelect.files[0];
-  if (image){
-      itemImage.src = URL.createObjectURL(image);
-      itemImage.classList.toggle("previewAvatar");
-      itemLabel.classList.remove("previewAvatar");
-      itemLabel.classList.toggle("disable");
+  if (image) {
+    itemImage.src = URL.createObjectURL(image);
+    itemImage.classList.toggle("preview-avatar");
   }
 };
+
+
 async function enableAuthorization() {
     document.getElementById("myProfile").classList.toggle("show");
 }

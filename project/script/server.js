@@ -1,33 +1,59 @@
 const path = require("path");
 const express = require("express");
+const formidable = require("formidable")
 const {getListOfItemsBySubname, returnListOfFilteredItems, addPurchase, deleteItemFromCartById, returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser, addItemToCartById, returnListOfObjectsByNames} = require("./data/data");
 
 const app = express();
 
 app.use(express.json());
 
-//искать комменты по сделанному в этом скрипте, а также в data.js, cart.hbs и index.html
-
-
 app.set("view engine", "hbs");
 app.use(express.static(path.join(__dirname, "public")));
 
 let currentUser;
 let items = returnListOfItems();
+    
 
 app
     .get("/", (_, res) =>{
         res.render("items.hbs", {items: items, currentUser});
     })
     .post("/user/sign-up", (req, res) =>{
-        const user = req.body;
-        const ans = addNewUser(user);
-        if(ans != "Аккаунт создан!"){
-            res.status(500).send(ans);
-            return;
-        }
-        currentUser = req.body;
-        res.status(200).render("items.hbs", {items: items, currentUser});
+        let user = {};
+        let form = new formidable.IncomingForm({
+            multiples: true,
+            keepExtensions: true,
+            maxFileSize: 1 * 1024 * 1024,
+            uploadDir: "./public/uploads",
+            allowEmptyFiles: true,
+            minFileSize: 0
+          });
+
+          form.on("fileBegin", (_, file) => {
+            file.filepath = path.join(form.uploadDir, file.originalFilename);
+          });
+          form.parse(req, (err, fields, files) => {
+            if (err) {
+              res.status(400).send(err);
+              return;
+            }
+            if (files && fields) {
+              user = {
+                login: fields.login[0],
+                password: fields.password[0],
+                role: fields.role[0],
+                image: files.avatarImgName[0].originalFilename | "",
+              };
+            }
+            const ans = addNewUser(user);
+            if(ans != "Аккаунт создан!"){
+                res.status(500).send(ans);
+                return;
+            }
+            currentUser = req.body;
+            res.status(200).render("items.hbs", {items: items, currentUser});
+          });
+          
     })
     .get("/user/sign-in", (req, res) =>{
         const login = req.query.login;
@@ -44,15 +70,39 @@ app
         res.render("personal-info.hbs", {currentUser});
     })
     .post("/retailer/add/item", (req, res) =>{
-        let item = req.body;
-        item.retailer = currentUser.login;
-        const response = addNewItem(item);
-        if(response !== "Товар добавлен!"){
-            res.status(500).send(response);
-            return;
-        }
-        items = returnListOfItems();
-        res.status(200).send(response);
+        let item = {};
+        let form = new formidable.IncomingForm({
+            multiples: true,
+            keepExtensions: true,
+            maxFileSize: 1 * 1024 * 1024,
+            uploadDir: "./public/uploads",
+          });
+
+          form.on("fileBegin", (_, file) => {
+            file.filepath = path.join(form.uploadDir, file.originalFilename);
+          });
+          form.parse(req, (err, fields, files) => {
+            if (err) {
+              res.status(400).send(err);
+              return;
+            }
+            if (files && fields) {
+              item = {
+                name: fields.name[0],
+                price: fields.price[0],
+                category: fields.category[0],
+                image: files.itemImgName[0].originalFilename,
+              };
+            }
+            item.retailer = currentUser.login;
+            const response = addNewItem(item);
+            if(response !== "Товар добавлен!"){
+                res.status(500).send(response);
+                return;
+            }
+            items = returnListOfItems();
+            res.status(200).send(response);
+          });
     })
     .get("/user/moderate", (_, res) =>{
         let users = returnModifyingListOfUsers();
@@ -116,7 +166,7 @@ app
     })
     .get("/search", (req, res)=>{
         const searchBar = req.query.str;
-        let items = getListOfItemsBySubname(searchBar);
+        items = getListOfItemsBySubname(searchBar);
         res.render("items.hbs", {items: items, currentUser});
     })
     .use((_, res)=>{

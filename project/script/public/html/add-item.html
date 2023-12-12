@@ -11,6 +11,7 @@
 </head>
 <body>
     <div class="container add">
+        <form id="form-item" action="/retailer/add/item" method="POST" enctype="multipart/form-data">
         <div class="cont1">
             <img id="itemImage" class="imageSignUp" alt="Avatar" src="https://img.freepik.com/premium-vector/shopping-trolley-logo-and-vector-template_658089-5994.jpg"/>
             <input
@@ -21,9 +22,9 @@
             accept="image/*"/>
         </div>
         
-        <input type="text" id="itemName" placeholder="Наименование товара:">
-        <input type="text" id="itemPrice" placeholder="Цена товара, бел. рубли:">
-        <select id="category">
+        <input type="text" id="itemName" placeholder="Наименование товара:" name="name" required>
+        <input type="text" id="itemPrice" placeholder="Цена товара, бел. рубли:" name="price" required>
+        <select id="category" name="category" required>
             <option value="">Выберите категорию</option>
             <option value="accessories">Аксессуары</option>
             <option value="cosmetics">Косметика</option>
@@ -32,6 +33,7 @@
             <option value="gifts">Подарки</option>
         </select>
         <button id="add-item" onclick="addItem()">Добавить</button>
+        </form>
     </div>
 </body>
 </html>

@@ -24,7 +24,7 @@ function returnListOfItems(){
         const itemObj = {
             id: id++,
             itemName: key,
-            itemImg: items[key].img,
+            itemImg: items[key].image,
             price: +items[key].price,
             retailer: items[key].retailer, 
             rating: +items[key].rating,
@@ -120,16 +120,17 @@ function checkUser(login, password){
     return false;
 }
 function addNewItem(obj){
-    const {name, price, category, retailer} = obj;
+    const {name, price, category, retailer, image} = obj;
     if(!ifItemExists(name) && name && price && category){
         items[name] = {
             price: +price,
             category: category,
             retailer: retailer,
             sales: 0,
-            rating: 0
+            rating: 0,
+            image: image
         };
-        users[retailer].shop_items.push(name);
+        users[retailer].items.push(name);
         restoreJson();
         return "Товар добавлен!";
     }
@@ -173,7 +174,7 @@ function returnListOfObjectsByNames(arrayOfNames){
     for(let i = 0; i < arrayOfNames.length; i++){
         let obj = items[arrayOfNames[i]];
         obj.id = +i;
-        listOfObjects.push(obj);
+        listOfObjects.push({itemName: arrayOfNames[i], ...obj});
     }
     return listOfObjects;
 }
