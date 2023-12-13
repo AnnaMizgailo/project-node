@@ -17,9 +17,6 @@
                     <img id="user-image" src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png">
                 {{/unless}}
                 <p>{{currentUser.login}}</p>
-                {{#each currentUser.items}}
-                    <li>{{this}}</li>
-                {{/each}}
         {{/if}}
         {{#unless currentUser}}
             <p>Упс... Нужно зарегистрироваться!</p>
@@ -29,6 +26,9 @@
         {{/if}}
         {{#if currentUser.moderate}}
             <button onclick="userModify()">Работа с пользователями</button>
+        {{/if}}
+        {{#if currentUser.shop}}
+            <button onclick="viewListOfPurchases()">Мои покупки</button>
         {{/if}}
         <button onclick="backToMainPage()">На главную</button>
     </div>

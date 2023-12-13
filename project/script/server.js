@@ -1,7 +1,7 @@
 const path = require("path");
 const express = require("express");
 const formidable = require("formidable")
-const {getListOfItemsBySubname, returnListOfFilteredItems, addPurchase, deleteItemFromCartById, returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser, addItemToCartById, returnListOfObjectsByNames} = require("./data/data");
+const {addReview, addRating, getListOfItemsBySubname, returnListOfFilteredItems, addPurchase, deleteItemFromCartById, returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser, addItemToCartById, returnListOfObjectsByNames} = require("./data/data");
 
 const app = express();
 
@@ -50,8 +50,8 @@ app
                 res.status(500).send(ans);
                 return;
             }
-            currentUser = req.body;
-            res.status(200).render("items.hbs", {items: items, currentUser});
+            currentUser = user;
+            res.status(200).send("ok");
           });
           
     })
@@ -168,6 +168,26 @@ app
         const searchBar = req.query.str;
         items = getListOfItemsBySubname(searchBar);
         res.render("items.hbs", {items: items, currentUser});
+    })
+    .get("/customer/purchases", (_, res) =>{
+      let purchases = returnListOfObjectsByNames(currentUser.items);
+      res.status(200).render("purchases.hbs", {items: purchases});
+    })
+    .put("/item/add/review", (req, res)=>{
+      const reviewInfo = req.body;
+      const id = reviewInfo.id;
+      const review = reviewInfo.review;
+      console.log(reviewInfo);
+      if(!addReview(items[id].itemName, review)){
+        res.status(404).send("Введите отзыв!");
+        return;
+      }
+      res.status(200).send("Отзыв добавлен!");
+    })
+    .put("/item/set/rating", (req, res) =>{
+      const id = req.body.id;
+      addRating(items[id].itemName);
+      res.status(200).send("Мы рады, что вам понравился товар!");
     })
     .use((_, res)=>{
         res.status(404).send("<h1>Not found</h1>");

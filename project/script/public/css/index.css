@@ -9,7 +9,10 @@ body{
     padding-bottom: 2%;
 }
 .item-img{
-    width: 70%;
+    width: 15vw;
+    height: 15vw;
+    object-fit: contain;
+    margin-top: 2%;
 }
 .button-cart{
     background-color: plum;
@@ -114,4 +117,22 @@ body{
     border-radius: 5%;
     margin-left: 45%;
     align-items: center;
+}
+.user{
+    width: 25%;
+    border: 2px solid #FBCEB1;
+}
+.button-rating, .button-review{
+    width: 30%;
+    background-color: #FBCEB1;
+    color: white;
+    border: none;
+    border-radius: 5%;
+    margin: 1%;
+}
+.rating, .review{
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+    flex-direction: row;
 }

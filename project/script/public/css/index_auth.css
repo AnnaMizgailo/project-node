@@ -9,24 +9,23 @@
     padding: 10%;
     border-radius: 30%;
 }
-#form{
+#form, #form-item{
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     margin: 5% auto;
 }
-.container>input, #form>input{
+.container>input, #form>input, #form-item>input{
     width: 70%;
     margin: 2% auto;
 }
-#form>select{
+#form>select, #form-item>select {
     margin-bottom: 2%;
 }
-.container>button, #form>button{
+.container>button, #form>button, #form-item>button{
     width: 60%;
     background-color: #fff;
-    
     border: none;
     padding: 10%;
     margin: 0 auto;
@@ -67,4 +66,7 @@
 }
 #add-item{
     color:#8A2BE2;
+}
+.personal-cabinet>button>a{
+    text-decoration: none;
 }

@@ -1,6 +1,13 @@
-async function signUp(event){
-  event.preventDefault();
-  form.submit();
+async function signUp(){
+  let form = document.querySelector("#form");
+  const response = await fetch("/user/sign-up", {
+    method: "POST",
+    body: new FormData(form)
+  })
+  if(response.ok){
+    document.location = "/";
+  }
+ 
 
 }
 async function signIn(){
@@ -17,10 +24,15 @@ async function backToMainPage(){
     document.location = "/";
 }
 
-async function addItem(event){
-    event.preventDefault();
-    form-item.submit();
+async function addItem(){
+  let form = document.querySelector("#form-item");
+  const response = await fetch("/retailer/add/item", {
+    method: "POST",
+    body: new FormData(form)
+  })
+  if(response.ok){
     document.location = "/";
+  }
 }
 
 async function userModify(){
@@ -123,6 +135,31 @@ async function search(e){
   }
 }
 
-document.querySelector("#search").addEventListener('keydown', search)
+document.querySelector("#search").addEventListener('keydown', search);
 
+async function viewListOfPurchases(){
+  document.location = "/customer/purchases";
+}
+async function writeReview(id){
+  const review = document.querySelector("#review").value;
+  let data = {
+    id: +id,
+    review: review
+  }
+  const response = await fetch("/item/add/review", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data)
+  });
+  alert(await response.text());
+}
+async function setRating(id){
+  const response = await fetch("/item/set/rating", {
+    method: "PUT",
+    body: JSON.stringify({id: id})
+  });
+  alert(await response.text());
+}
 

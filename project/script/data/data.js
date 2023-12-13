@@ -29,7 +29,8 @@ function returnListOfItems(){
             retailer: items[key].retailer, 
             rating: +items[key].rating,
             sales: +items[key].sales,
-            category: items[key].category
+            category: items[key].category,
+            reviews: items[key].reviews
         };
         listOfItems.push(itemObj);
     }
@@ -128,7 +129,8 @@ function addNewItem(obj){
             retailer: retailer,
             sales: 0,
             rating: 0,
-            image: image
+            image: image, 
+            reviews: []
         };
         users[retailer].items.push(name);
         restoreJson();
@@ -207,4 +209,17 @@ function getListOfItemsBySubname(subname){
     return listOfItems;
 }
 
-module.exports = {getListOfItemsBySubname, returnListOfFilteredItems, addPurchase, deleteItemFromCartById, returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser, addItemToCartById, returnListOfObjectsByNames};
+function addReview(name, review){
+    if(review == ""){
+        return false;
+    }
+    items[name].reviews.push(review);
+    restoreJson();
+    return true;
+}
+function addRating(name){
+    items[name].rating += 1;
+    restoreJson();
+}
+
+module.exports = {addReview, addRating, getListOfItemsBySubname, returnListOfFilteredItems, addPurchase, deleteItemFromCartById, returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser, addItemToCartById, returnListOfObjectsByNames};
