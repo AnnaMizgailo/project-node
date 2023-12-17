@@ -20,10 +20,10 @@
         </div>
         <select onchange="filterItems()" ondblclick="resetFilters()" id="filters">
             <option value="">Категория</option>
-            <option value="accesories">Аксессуары</option>
+            <option value="accessories">Аксессуары</option>
             <option value="clothes">Одежда</option>
             <option value="cosmetics">Косметика</option>
-            <option value="presents">Подарки</option>
+            <option value="gifts">Подарки</option>
             <option value="stationery">Канцелярия</option>
         </select>
         <input type="text" id="search" placeholder="поиск 🔍︎">
@@ -37,7 +37,8 @@
                     <p class="retailer">{{retailer}}</p>
                     <p class="itemName">{{itemName}}</p>
                     <div class="cont">
-                        <p class="rating">{{rating}}⭐</p>
+                        <p class="rating">{{rating}}👍</p>
+                        <p class="reviews" onclick="showReviews({{id}})">{{numOfReviews}}📝</p>
                         <p class="sales">{{sales}}🛒</p>
                     </div>
                     <button class="button-cart" onclick="addToCart({{id}})">В корзину</button>

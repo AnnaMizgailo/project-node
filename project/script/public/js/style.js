@@ -1,4 +1,4 @@
-avatarSelect.onchange = (event) => {
+async function avatarChange(){
   const image = avatarSelect.files[0];
   if (image) {
     avatarImage.src = URL.createObjectURL(image);
@@ -6,9 +6,11 @@ avatarSelect.onchange = (event) => {
   }
 };
 
-itemSelect.onchange = (event) => {
+async function itemChange() {
   const image = itemSelect.files[0];
+  console.log("hello");
   if (image) {
+    console.log("hi");
     itemImage.src = URL.createObjectURL(image);
     itemImage.classList.toggle("preview-avatar");
   }

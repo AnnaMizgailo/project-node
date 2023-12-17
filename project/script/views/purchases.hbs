@@ -18,18 +18,26 @@
                     <p class="retailer">{{retailer}}</p>
                     <p class="itemName">{{itemName}}</p>
                     <div class="cont">
-                        <p class="rating">{{rating}}⭐</p>
+                        <p class="rating">{{rating}}👍</p>
                         <p class="sales">{{sales}}🛒</p>
                     </div>
                     <div class="rating">
+                    {{#if isRated}}
+                        <button class="button-rating" onclick="deleteRating({{id}})">Отменить оценку</button>
+                    {{/if}}
+                    {{#unless isRated}}
                         <button class="button-rating" onclick="setRating({{id}})">Нравится товар</button>
+                    {{/unless}}
                     </div>
                     <div class="review">
-                        <input type="text" id="review" placeholder="Написать отзыв">
-                        <button class="button-review" onclick="writeReview({{id}})">Отправить</button>
+                    {{#if isReviewed}}
+                        <button class="button-review">Отзыв сохранен</button>
+                    {{/if}}
+                    {{#unless isReviewed}}
+                        <input type="text" id="review{{id}}" placeholder="Написать отзыв">
+                        <button class="button-review" onclick="writeReview({{id}})">Отправить</button>    
+                    {{/unless}}
                     </div>
-                   
-                    
                 </div>
             {{/with}}
     {{/each}}
@@ -37,5 +45,6 @@
     {{#unless items}}
     <p>Вам еще предстоит совершить ваши покупки!</p>
     {{/unless}}
+    <button class="main-page purchases"onclick="backToMainPage()">На главную</button>
 </body>
 </html>

@@ -23,6 +23,7 @@
         {{/unless}}
         {{#if currentUser.retail}}
             <button><a href="/html/add-item.html">Добавить товар</a></button>
+            <button onclick="itemModify()">Ваши товары</button>
         {{/if}}
         {{#if currentUser.moderate}}
             <button onclick="userModify()">Работа с пользователями</button>

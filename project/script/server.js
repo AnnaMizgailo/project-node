@@ -1,7 +1,7 @@
 const path = require("path");
 const express = require("express");
 const formidable = require("formidable")
-const {addReview, addRating, getListOfItemsBySubname, returnListOfFilteredItems, addPurchase, deleteItemFromCartById, returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser, addItemToCartById, returnListOfObjectsByNames} = require("./data/data");
+const {changeItem, deleteItem, listOfRetailersItems, returnReviews, deleteRating, returnListOfPurchases, addReview, addRating, getListOfItemsBySubname, returnListOfFilteredItems, addPurchase, deleteItemFromCartById, returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser, addItemToCartById, returnListOfObjectsByNames} = require("./data/data");
 
 const app = express();
 
@@ -16,6 +16,7 @@ let items = returnListOfItems();
 
 app
     .get("/", (_, res) =>{
+
         res.render("items.hbs", {items: items, currentUser});
     })
     .post("/user/sign-up", (req, res) =>{
@@ -42,7 +43,7 @@ app
                 login: fields.login[0],
                 password: fields.password[0],
                 role: fields.role[0],
-                image: files.avatarImgName[0].originalFilename | "",
+                image: files.avatarImgName[0].originalFilename
               };
             }
             const ans = addNewUser(user);
@@ -50,7 +51,8 @@ app
                 res.status(500).send(ans);
                 return;
             }
-            currentUser = user;
+            currentUser = checkUser(user.login, user.password);
+            
             res.status(200).send("ok");
           });
           
@@ -170,24 +172,56 @@ app
         res.render("items.hbs", {items: items, currentUser});
     })
     .get("/customer/purchases", (_, res) =>{
-      let purchases = returnListOfObjectsByNames(currentUser.items);
+      let purchases = returnListOfPurchases(currentUser.items);
       res.status(200).render("purchases.hbs", {items: purchases});
     })
     .put("/item/add/review", (req, res)=>{
       const reviewInfo = req.body;
       const id = reviewInfo.id;
       const review = reviewInfo.review;
-      console.log(reviewInfo);
-      if(!addReview(items[id].itemName, review)){
+      if(!addReview(currentUser.items[id].name, review, currentUser.login)){
         res.status(404).send("Введите отзыв!");
         return;
       }
+      currentUser.items[id].isReviewed = true;
+      items = returnListOfItems();
       res.status(200).send("Отзыв добавлен!");
     })
     .put("/item/set/rating", (req, res) =>{
       const id = req.body.id;
       addRating(items[id].itemName);
+      currentUser.items[id].isRated = true;
+      items = returnListOfItems();
       res.status(200).send("Мы рады, что вам понравился товар!");
+    })
+    .put("/item/delete/rating", (req, res) =>{
+      const id = req.body.id;
+      deleteRating(items[id].itemName);
+      currentUser.items[id].isRated = false;
+      items = returnListOfItems();
+      res.status(200).send("Жалко:(");
+    })
+    .get("/item/show/reviews", (req, res) =>{
+      const id = req.query.id;
+      const response = returnReviews(items[id].itemName);
+      res.status(200).send(response);
+    })
+    .get("/item/modify", (_, res) =>{
+      const retailerItems = listOfRetailersItems(currentUser.login);
+      res.status(200).render("put-item.hbs", {items: retailerItems});
+    })
+    .delete("/delete/item", (req, res) =>{
+      const id = +req.query.id;
+      const response = deleteItem(currentUser.items[id], currentUser.login);
+      items = returnListOfItems();
+      res.status(200).send(response);
+    })
+    .put("/change/item", (req, res) =>{
+      const id = req.body.id;
+      const price = req.body.price;
+      const response = changeItem(currentUser.items[id], price);
+      items = returnListOfItems();
+      res.status(200).send(response);
     })
     .use((_, res)=>{
         res.status(404).send("<h1>Not found</h1>");

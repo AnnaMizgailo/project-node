@@ -30,7 +30,8 @@ function returnListOfItems(){
             rating: +items[key].rating,
             sales: +items[key].sales,
             category: items[key].category,
-            reviews: items[key].reviews
+            reviews: items[key].reviews,
+            numOfReviews: items[key].reviews.length
         };
         listOfItems.push(itemObj);
     }
@@ -180,9 +181,25 @@ function returnListOfObjectsByNames(arrayOfNames){
     }
     return listOfObjects;
 }
+function returnListOfPurchases(array){
+    let list = [];
+    for(let i = 0; i < array.length; i++){
+        let obj = items[array[i].name];
+        obj.id = +i;
+        obj.isReviewed = array[i].isReviewed;
+        obj.isRated = array[i].isRated;
+        list.push(obj);
+    }
+    return list;
+}
 function addPurchase(itemName, userName){
     items[itemName].sales +=1;
-    users[userName].items.push(itemName);
+    let purchase = {
+        name: itemName,
+        isReviewed: false,
+        isRated: false
+    }
+    users[userName].items.push(purchase);
     restoreJson();
 }
 function returnListOfFilteredItems(category){
@@ -209,11 +226,15 @@ function getListOfItemsBySubname(subname){
     return listOfItems;
 }
 
-function addReview(name, review){
+function addReview(name, review, login){
     if(review == ""){
         return false;
     }
-    items[name].reviews.push(review);
+    let obj = {
+        user: login,
+        review: review
+    }
+    items[name].reviews.push(obj);
     restoreJson();
     return true;
 }
@@ -221,5 +242,48 @@ function addRating(name){
     items[name].rating += 1;
     restoreJson();
 }
+function deleteRating(name){
+    items[name].rating -= 1;
+    restoreJson();
+}
+function returnReviews(name){
+    let string = "";
+    if(items[name].reviews.length < 1){
+        return "Пока отзывов на этот товар нет";
+    }
+    for(let i = 0; i<items[name].reviews.length; i++){
+        string += items[name].reviews[i].user + "📝:" + items[name].reviews[i].review + `\n`;
+    }
+    return string;
+}
+function listOfRetailersItems(retailer){
+    retailersItems = [];
+    for(let i = 0; i<users[retailer].items.length; i++){
+        let obj = items[users[retailer].items[i]];
+        obj.id = +i;
+        obj.itemName = users[retailer].items[i]
+        obj.numOfReviews = items[users[retailer].items[i]].reviews.length;
+        retailersItems.push(obj);
+    }
+    return retailersItems;
+}
+function deleteItem(name, login){
+    delete items[name];
+    for(let i = 0; i < users[login].items.length; i++){
+        if(name == users[login].items[i]){
+            users[login].items.splice(i, 1);
+        }
+    }
+    restoreJson();
+    return "Товар удален из базы!";
+}
+function changeItem(name, newPrice){
+    if(items[name].price == newPrice){
+        return "Введите новую информацию!";
+    }
+    items[name].price = newPrice;
+    restoreJson();
+    return "Информация о товаре изменена!";
+}
 
-module.exports = {addReview, addRating, getListOfItemsBySubname, returnListOfFilteredItems, addPurchase, deleteItemFromCartById, returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser, addItemToCartById, returnListOfObjectsByNames};
+module.exports = {changeItem, deleteItem, listOfRetailersItems, returnReviews, deleteRating, returnListOfPurchases, addReview, addRating, getListOfItemsBySubname, returnListOfFilteredItems, addPurchase, deleteItemFromCartById, returnListOfItems, addNewUser, checkUser, addNewItem, returnModifyingListOfUsers, deleteUserById, banUser, unbanUser, addItemToCartById, returnListOfObjectsByNames};
