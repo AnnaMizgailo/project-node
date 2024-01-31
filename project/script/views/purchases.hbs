@@ -21,7 +21,13 @@
                         <p class="rating">{{rating}}👍</p>
                         <p class="sales">{{sales}}🛒</p>
                     </div>
-                    <div class="rating">
+                    {{#if isComplained}}
+                        <p>Мы отправили вашу жалобу на рассмотрение модераторам!</p>
+                    {{/if}}
+                    {{#unless isComplained}}
+                        <p onclick="complain('{{retailer}}', {{id}})">Пожаловаться на продавца 🚩</p>
+                    {{/unless}}
+                      <div class="rating">
                     {{#if isRated}}
                         <button class="button-rating" onclick="deleteRating({{id}})">Отменить оценку</button>
                     {{/if}}
@@ -43,7 +49,8 @@
     {{/each}}
     {{/if}}
     {{#unless items}}
-    <p>Вам еще предстоит совершить ваши покупки!</p>
+    <img class="empty-purchases-img" src="https://shop.delo.su/images/stories/empty-cart.jpg">
+    <p class="empty-purchases">Вам еще предстоит совершить ваши покупки!</p>
     {{/unless}}
     <button class="main-page purchases"onclick="backToMainPage()">На главную</button>
 </body>

@@ -19,7 +19,7 @@ body{
     height: 20vw;
     border-radius: 100%;
     margin: 2% auto;
-    object-fit: contain;
+    object-fit: cover;
 }
 .personal-cabinet>button{
     background-color: #ba66ff;

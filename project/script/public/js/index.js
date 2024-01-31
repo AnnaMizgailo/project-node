@@ -1,4 +1,4 @@
-async function signUp(){
+async function signUp(){ //авторизация
   let form = document.querySelector("#form");
   const response = await fetch("/user/sign-up", {
     method: "POST",
@@ -10,7 +10,7 @@ async function signUp(){
  
 
 }
-async function signIn(){
+async function signIn(){ //регистрация
     const login = document.querySelector("#login").value;
     const password = document.querySelector("#password").value;
     const response = await fetch(`/user/sign-in?login=${login}&password=${password}`);
@@ -20,11 +20,11 @@ async function signIn(){
     }
     alert(await response.text());
 }
-async function backToMainPage(){
+async function backToMainPage(){ //функция для возврата на начальную страницу
     document.location = "/";
 }
 
-async function addItem(){
+async function addItem(){ //добавление товара для продавца
   let form = document.querySelector("#form-item");
   const response = await fetch("/retailer/add/item", {
     method: "POST",
@@ -35,7 +35,7 @@ async function addItem(){
   }
 }
 
-async function userModify(){
+async function userModify(){ //удалить пользователя для админа
   document.location = "/user/moderate";
 }
 async function deleteUser(id){
@@ -44,9 +44,11 @@ async function deleteUser(id){
   });
   if(response.ok){
     alert("Пользователь удален!");
+    
   }
+  location.reload();
 }
-async function banUser(id){
+async function banUser(id){ //баним пользователя как админ
   const data = {id: id};
   const response = await fetch("/user/moderate/ban", {
     method: "PUT",
@@ -57,8 +59,9 @@ async function banUser(id){
     if(response.ok){
       alert("Пользователь забанен!");
     }
+    location.reload();
 }
-async function unbanUser(id){
+async function unbanUser(id){ //отменяем бан как админ
   const data = {id: id};
   const response = await fetch("/user/moderate/unban", {
     method: "PUT",
@@ -69,9 +72,10 @@ async function unbanUser(id){
     if(response.ok){
       alert("Пользователь разбанен!");
     }
+    location.reload();
 }
 
-async function addToCart(id){
+async function addToCart(id){ //добавляем товар в корзину(только для покупателей!)
   const itemId = {id: id};
   const response = await fetch("/user/add/cart", {
     method: "POST",
@@ -81,10 +85,12 @@ async function addToCart(id){
     body: JSON.stringify(itemId)});
     if(response.ok){
       alert(await response.text());
+      return;
     }
+    alert(await response.text());
 }
 
-async function deleteFromCart(id){
+async function deleteFromCart(id){//удаляем товар из корзины
   const response = await fetch(`/user/delete/cart?id=${id}`, {
     method: "DELETE"
     });
@@ -94,7 +100,7 @@ async function deleteFromCart(id){
     }
 }
 
-async function payForItem(id){
+async function payForItem(id){//оплачиваем товар в корзине
   const response = await fetch(`/user/pay/cart?id=${id}`, {
     method: "DELETE"
     });
@@ -104,7 +110,7 @@ async function payForItem(id){
     }
 }
 
-async function filterItems(){
+async function filterItems(){//делаем фильтры для товаров на главной
   const category = document.querySelector("#filters").value;
   const response = await fetch(`/filter?category=${category}`);
   if(response.ok){
@@ -114,7 +120,7 @@ async function filterItems(){
   }
 }
 
-async function resetFilters(){
+async function resetFilters(){//сбрасываем фильтры
   const category = "";
   const response = await fetch(`/filter?category=${category}`);
   if(response.ok){
@@ -124,25 +130,24 @@ async function resetFilters(){
   }
 }
 
-async function search(e){
-  if(e.keyCode == 13){
+async function search(e){ //функция для поисковой строки
+  if(e.keyCode == 13){//по нажатию на Enter запрос отправляется на сервер
     const searchBar = document.querySelector("#search").value;
     console.log(searchBar);
     const response = await fetch(`/search?str=${searchBar}`);
     if(response.ok){
       document.location = "/";
       location.reload();
-      document.querySelector("#search").value = searchBar;
     }
   }
 }
 
-document.querySelector("#search").addEventListener('keydown', search);
+document.querySelector("#search").addEventListener('keydown', search);//добавляем прослушиватель для Enter
 
-async function viewListOfPurchases(){
+async function viewListOfPurchases(){//переход на страницу с покупочками для покупателя
   document.location = "/customer/purchases";
 }
-async function writeReview(id){
+async function writeReview(id){//функция для написания отзыва на купленный товар
   const review = document.querySelector(`#review${id}`).value;
   let data = {
     id: +id,
@@ -158,7 +163,7 @@ async function writeReview(id){
   alert(await response.text());
   location.reload();
 }
-async function setRating(id){
+async function setRating(id){//поставить отметку "Нравится"
   const data = {
     id: +id
   }
@@ -173,7 +178,7 @@ async function setRating(id){
   alert(await response.text());
   location.reload();
 }
-async function deleteRating(id){
+async function deleteRating(id){//отменить отметочку "Нравится"
   const data = {
     id: +id
   }
@@ -188,16 +193,16 @@ async function deleteRating(id){
   location.reload();
 }
 
-async function showReviews(id){
+async function showReviews(id){//посмотреть отзывы
   const response = await fetch(`/item/show/reviews?id=${id}`);
   alert(await response.text());
 }
 
-async function itemModify(){
+async function itemModify(){//перенаправочка на конструктор товаров для продавца
   document.location = "/item/modify";
 }
 
-async function changeItem(id){
+async function changeItem(id){//изменить товар в конструкторе для продавца
   const data = {
     id: +id,
     price: document.querySelector(`.price${id}`).value
@@ -213,10 +218,44 @@ async function changeItem(id){
   location.reload();
 }
 
-async function deleteItem(id){
+async function deleteItem(id){//удалить товар у продавца
   const response = await fetch(`/delete/item?id=${id}`, {
     method: "DELETE"
   })
+  alert(await response.text());
+  location.reload();
+}
+
+async function toCart(){//перейти в корзину для пользователя
+  const response = await fetch("/user/cart");
+  if(!response.ok){
+    alert(await response.text());
+    return;
+  }
+  document.location = "/user/cart";
+}
+
+async function signOut(){//войти в гостевой режим
+  const response = await fetch("/user/sign-out");
+  if(response.ok){
+    alert(await response.text());
+    location.reload();
+  }
+}
+async function complain(retailer, id){//плохой продавец, нужно пожаловаться на него!
+  const data = JSON.stringify ( {
+    retailer: retailer,
+    id: +id
+  });
+
+  console.log(data);
+  const response = await fetch("/retailer/complain",{
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: data
+  });
   alert(await response.text());
   location.reload();
 }

@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="menu">
-        <button class="cart"><a href="/user/cart">Корзина</a></button>
+        <button class="cart" onclick="toCart()">Корзина</button>
         <button onclick="enableAuthorization()" class="profile">Профиль</button>
         <div id="myProfile" class="profile-content">
                 <a href="./html/sign-up.html">Регистрация</a>
@@ -27,6 +27,9 @@
             <option value="stationery">Канцелярия</option>
         </select>
         <input type="text" id="search" placeholder="поиск 🔍︎">
+        {{#if currentUser.login}}
+            <button class="exit" onclick="signOut()">Выйти</button>
+        {{/if}}
 </div>
     <div class="items-container">
         {{#each items}}

@@ -21,6 +21,9 @@
                 {{/unless}}
                 <p>{{login}}</p>
                 <p>{{role}}</p>
+                {{#if numOfComplains}}
+                    <p>{{numOfComplains}}🚩</p>
+                {{/if}}
                 <button onclick="deleteUser({{id}})">Удалить пользователя</button>
                 {{#if banned}}
                     <button onclick="unbanUser({{id}})">Разблокировать пользователя</button>

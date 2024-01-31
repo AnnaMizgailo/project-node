@@ -28,7 +28,10 @@
         {{/with}}
     {{/each}}
     {{#unless cart_items}}
-        <p>Корзина пуста</p>
+        <div class="container-empty">
+            <img class="empty-cart-img" src="https://olsi-trade.ru/local/templates/olsi/img/icon/empty-basket.svg">
+            <p class="empty-cart">Корзина пуста</p>
+        </div>
     {{/unless}}
     </div>
     <button id="back-to-main" onclick="backToMainPage()">На главную</button>
