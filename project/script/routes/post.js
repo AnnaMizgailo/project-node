@@ -1,9 +1,9 @@
 const path = require("path");
 const express = require("express");
 const formidable = require("formidable")
-const {returnModifyingListOfUsers, addNewUser, checkUser, addItemToCartById, deleteItemFromCartById, complainOnRetailer, deleteUserById, banUser, unbanUser} = require("../data/users");
-const {returnListOfItems, returnListOfPurchases, addReview, changeItem, returnReviews, deleteRating, addRating, getListOfItemsBySubname, returnListOfFilteredItems, addNewItem} = require("../data/items");
-const {currentUser} = require("./get");
+const {addNewItem} = require("../data/data")
+const { addNewUser, addItemToCartById} = require("../data/users");
+const {returnListOfItems} = require("../data/items");
 const router = express.Router();
 
 router
@@ -39,7 +39,8 @@ router
                 res.status(500).send(ans);
                 return;
             }
-            currentUser = checkUser(user.login, user.password);
+            req.session.username = user.login;
+            req.session.auth = true;
             
             res.status(200).send("ok");
         });
@@ -70,24 +71,23 @@ router
                 image: files.itemImgName[0].originalFilename,
             };
             }
-            item.retailer = currentUser.login;
+            item.retailer = req.session.username;
             const response = addNewItem(item);
             if(response !== "Товар добавлен!"){
                 res.status(500).send(response);
                 return;
             }
-            items = returnListOfItems();
             res.status(200).send(response);
         });
     })
     .post("/user/add/cart", (req, res)=>{//добавить товар в корзину
         const id = req.body.id;
         const arrayOfItems = returnListOfItems();
-        if(!currentUser){
+        if(!req.session.auth){
           res.status(500).send("Сначала зарегистрируйтесь!");
           return;
         }
-        const login = currentUser.login;
+        const login = req.session.username;
         const response = addItemToCartById(id, arrayOfItems, login);
         res.status(200).send(response);
     });

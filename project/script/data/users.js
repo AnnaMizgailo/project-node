@@ -17,6 +17,9 @@ function ifItemInArray(array, name){//а этот элемент есть в м�
     }
     return false;
 }
+function returnUserByLogin(login){
+    return users[login];
+}
 function returnModifyingListOfUsers(){//списочек юзеров для админа на мониторинг
     const keys = Object.keys(users);
     listOfUsers = [];
@@ -129,4 +132,4 @@ function addItemToCartById(id, array, login){//добавляем по айди�
     return "Вы не являетесь покупателем!";
     
 }
-module.exports = {users, returnModifyingListOfUsers, addNewUser, checkUser, addItemToCartById, deleteItemFromCartById, complainOnRetailer, deleteUserById, banUser, unbanUser};
+module.exports = {returnUserByLogin, users, returnModifyingListOfUsers, addNewUser, checkUser, addItemToCartById, deleteItemFromCartById, complainOnRetailer, deleteUserById, banUser, unbanUser};

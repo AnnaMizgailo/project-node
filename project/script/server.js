@@ -1,8 +1,7 @@
 const path = require("path");
 const express = require("express");
 const handler = require("./routes/index");
-const crypto = require("crypto");
-const session = require("express-session");
+const {authInit} = require("./middleware/session");
 
 const app = express();
 app.use(express.json());
@@ -12,12 +11,6 @@ app.use(express.json());
 app.set("view engine", "hbs");
 app.use(express.static(path.join(__dirname, "public")));
 
-const authInit = () => 
-    session({
-        secret: crypto.randomBytes(32).toString("hex"),
-        resave: false,
-        saveUninitialized: true
-    });
 
 app    
     .use(authInit())

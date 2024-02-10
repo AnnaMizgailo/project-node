@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const {users} = require("./users");
-const {items} = require("./items");
+const {items, ifItemExists} = require("./items");
 
 
 function restoreJson(){ //для обновления данных о пользователе в процессе сессии
@@ -52,7 +52,24 @@ function deleteItem(name, login){//удалить товар
     restoreJson();
     return "Товар удален из базы!";
 }
+function addNewItem(obj){//добавить новый предмет для продавца
+    const {name, price, category, retailer, image} = obj;
+    if(!ifItemExists(name) && name && price && category){
+        items[name] = {
+            price: +price,
+            category: category,
+            retailer: retailer,
+            sales: 0,
+            rating: 0,
+            image: image, 
+            reviews: []
+        };
+        users[retailer].items.push(name);
+        restoreJson();
+        return "Товар добавлен!";
+    }
+    return "Произошла ошибка!";
+}
 
 
-
-module.exports = {deleteItem, listOfRetailersItems, addPurchase, returnListOfObjectsByNames};
+module.exports = {deleteItem, listOfRetailersItems, addPurchase, returnListOfObjectsByNames, addNewItem};

@@ -49,25 +49,6 @@ function ifItemInArray(array, name){//а этот элемент есть в м�
     return false;
 }
 
-function addNewItem(obj){//добавить новый предмет для продавца
-    const {name, price, category, retailer, image} = obj;
-    if(!ifItemExists(name) && name && price && category){
-        items[name] = {
-            price: +price,
-            category: category,
-            retailer: retailer,
-            sales: 0,
-            rating: 0,
-            image: image, 
-            reviews: []
-        };
-        users[retailer].items.push(name);
-        restoreJson();
-        return "Товар добавлен!";
-    }
-    return "Произошла ошибка!";
-}
-
 function returnListOfPurchases(array){//вернуть список покупок
     let list = [];
     for(let i = 0; i < array.length; i++){
@@ -141,4 +122,4 @@ function addReview(name, review, login){//отзывы на товары!
     restoreJson();
     return true;
 }
-module.exports = {returnListOfItems, items, ifItemInArray,  returnListOfPurchases, addReview, changeItem, returnReviews, deleteRating, addRating, getListOfItemsBySubname, returnListOfFilteredItems, addNewItem,};
+module.exports = {ifItemExists, returnListOfItems, items, ifItemInArray,  returnListOfPurchases, addReview, changeItem, returnReviews, deleteRating, addRating, getListOfItemsBySubname, returnListOfFilteredItems};

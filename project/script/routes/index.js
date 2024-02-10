@@ -2,7 +2,7 @@ const getRouter = require("./get"); //т.к. экспорт без фигурн�
 const postRouter = require("./post");
 const deleteRouter = require("./delete");
 const putRouter = require("./put");
-const {returnListOfItems} = require("../data/items");
+
 function handler(request, response) {
   switch (request.method) {
     case "GET":

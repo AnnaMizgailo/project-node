@@ -1,5 +1,5 @@
 const express = require("express");
-const {returnModifyingListOfUsers, addNewUser, checkUser, addItemToCartById, deleteItemFromCartById, complainOnRetailer, deleteUserById, banUser, unbanUser} = require("../data/users");
+const {returnUserByLogin, returnModifyingListOfUsers, addNewUser, checkUser, addItemToCartById, deleteItemFromCartById, complainOnRetailer, deleteUserById, banUser, unbanUser} = require("../data/users");
 const {returnListOfItems, returnListOfPurchases, addReview, changeItem, returnReviews, deleteRating, addRating, getListOfItemsBySubname, returnListOfFilteredItems, addNewItem} = require("../data/items");
 const {currentUser} = require("./get");
 const router = express.Router();
@@ -25,25 +25,25 @@ router
     const reviewInfo = req.body;
     const id = reviewInfo.id;
     const review = reviewInfo.review;
-    if(!addReview(currentUser.items[id].name, review, currentUser.login)){
+    if(!addReview(returnUserByLogin(req.session.username).items[id].name, review, req.session.username)){
         res.status(404).send("Введите отзыв!");
         return;
     }
-    currentUser.items[id].isReviewed = true;
+    returnUserByLogin(req.session.username).items[id].isReviewed = true;
     items = returnListOfItems();
     res.status(200).send("Отзыв добавлен!");
     })
     .put("/item/set/rating", (req, res) =>{//поставить лайк товару
     const id = req.body.id;
-    addRating(currentUser.items[id].name);
-    currentUser.items[id].isRated = true;
+    addRating(returnUserByLogin(req.session.username).items[id].name);
+    returnUserByLogin(req.session.username).items[id].isRated = true;
     items = returnListOfItems();
     res.status(200).send("Мы рады, что вам понравился товар!");
     })
     .put("/item/delete/rating", (req, res) =>{//отменить отметку "Нравится"
     const id = req.body.id;
-    deleteRating(currentUser.items[id].name);
-    currentUser.items[id].isRated = false;
+    deleteRating(returnUserByLogin(req.session.username).items[id].name);
+    returnUserByLogin(req.session.username).items[id].isRated = false;
     items = returnListOfItems();
     res.status(200).send("Жалко:(");
     })
@@ -51,7 +51,7 @@ router
     .put("/change/item", (req, res) =>{//изменить данные о товаре
     const id = req.body.id;
     const price = req.body.price;
-    const response = changeItem(currentUser.items[id], price);
+    const response = changeItem(returnUserByLogin(req.session.username).items[id], price);
     items = returnListOfItems();
     res.status(200).send(response);
     })
@@ -59,7 +59,7 @@ router
     const retailer = req.body.retailer;
     const id = req.body.id;
     const response = complainOnRetailer(retailer);
-    currentUser.items[id].isComplained = true;
+    returnUserByLogin(req.session.username).items[id].isComplained = true;
     res.status(200).send(response);
     });
 module.exports = router;

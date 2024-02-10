@@ -1,8 +1,6 @@
 const express = require("express");
-const {deleteItem, listOfRetailersItems, addPurchase, returnListOfObjectsByNames} = require("../data/data");
-const {returnModifyingListOfUsers, addNewUser, checkUser, addItemToCartById, deleteItemFromCartById, complainOnRetailer, deleteUserById, banUser, unbanUser} = require("../data/users");
-const {returnListOfItems, returnListOfPurchases, addReview, changeItem, returnReviews, deleteRating, addRating, getListOfItemsBySubname, returnListOfFilteredItems, addNewItem} = require("../data/items");
-const {currentUser} = require("./get");
+const {deleteItem, addPurchase} = require("../data/data");
+const {returnUserByLogin, returnModifyingListOfUsers, deleteItemFromCartById, deleteUserById} = require("../data/users");
 const router = express.Router();
 
 router
@@ -15,15 +13,15 @@ router
     })
     .delete("/user/delete/cart", (req, res) =>{//удалить товар из корзины
         const id = req.query.id;
-        const login = currentUser.login;
+        const login = req.session.username;
         const response = deleteItemFromCartById(id, login);
         res.status(200).send(response);
 
     })
     .delete("/user/pay/cart", (req, res) =>{//оплатить товар в корзине
         const id = req.query.id;
-        const login = currentUser.login;
-        const name = currentUser.cart_items[id];
+        const login = req.session.username;
+        const name = returnUserByLogin(req.session.username).cart_items[id];
         deleteItemFromCartById(id, login);
         addPurchase(name, login);
         res.status(200).send("Поздравляем с покупкой!");
@@ -31,8 +29,7 @@ router
     })
     .delete("/delete/item", (req, res) =>{//удалить товар
         const id = +req.query.id;
-        const response = deleteItem(currentUser.items[id], currentUser.login);
-        items = returnListOfItems();
+        const response = deleteItem(returnUserByLogin(req.session.username).items[id], req.session.username);
         res.status(200).send(response);
       });
       
